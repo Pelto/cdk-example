@@ -1,6 +1,6 @@
 import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { Repository } from "aws-cdk-lib/aws-codecommit";
-import { CodeBuildStep, CodePipeline, CodePipelineSource } from "aws-cdk-lib/pipelines";
+import { CodeBuildStep, CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
 
 import { ApiStage } from "./api-stage";
@@ -33,6 +33,21 @@ export class ApiPipelineStack extends Stack{
       }),
     });
 
-    pipeline.addStage(new ApiStage(this, "ApiStage"));
+    const devStage = new ApiStage(this, "DevStage");
+    const prodStage = new ApiStage(this, "ProdStage");
+
+    pipeline.addStage(devStage);
+    pipeline.addStage(prodStage);
+
+    // dev.addPost(new ShellStep("Test", {
+    //   envFromCfnOutputs: {
+    //     ENDPOINT_URL: dev.e
+    //   }
+    //   commands: [
+    //     'curl -Ssf $ENDPOINT_URL',
+    //     'curl -Ssf $ENDPOINT_URL/hello',
+    //     'curl -Ssf $ENDPOINT_URL/test'
+    //   ],
+    // }));
   }
 }
