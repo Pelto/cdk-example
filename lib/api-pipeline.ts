@@ -3,6 +3,8 @@ import { Repository } from "aws-cdk-lib/aws-codecommit";
 import { CodeBuildStep, CodePipeline, CodePipelineSource } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
 
+import { ApiStage } from "./api-stage";
+
 export class ApiPipelineStack extends Stack{
   public constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -27,5 +29,7 @@ export class ApiPipelineStack extends Stack{
         ]
       }),
     });
+
+    pipeline.addStage(new ApiStage(this, "ApiStage"));
   }
 }
