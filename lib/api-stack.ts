@@ -37,7 +37,7 @@ export class ApiStack extends cdk.Stack {
       },
     });
 
-    //table.grantReadWriteData(hitCounterHandler);
+    table.grantReadWriteData(hitCounterHandler);
     helloHandler.grantInvoke(hitCounterHandler);
 
     const api = new LambdaRestApi(this, "Api", {
