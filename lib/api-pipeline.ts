@@ -24,7 +24,7 @@ export class ApiPipelineStack extends Stack{
         ],
         buildEnvironment: {
           privileged: true,
-        }
+        },
         commands: [
           `npm ci`,
           `npm run build`,
