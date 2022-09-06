@@ -31,7 +31,7 @@ export class ApiStack extends cdk.Stack {
       bundling: {
         minify: true,
         sourceMap: true,
-      }
+      },
     });
 
     table.grantReadWriteData(hitCounterHandler);
