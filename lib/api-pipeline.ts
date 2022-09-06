@@ -32,5 +32,7 @@ export class ApiPipelineStack extends Stack{
         ]
       }),
     });
+
+    pipeline.addStage(new ApiStage(this, "ApiStage"));
   }
 }
