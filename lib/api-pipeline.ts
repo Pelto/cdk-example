@@ -36,18 +36,17 @@ export class ApiPipelineStack extends Stack{
     const devStage = new ApiStage(this, "DevStage");
     const prodStage = new ApiStage(this, "ProdStage");
 
-    pipeline.addStage(devStage);
-    pipeline.addStage(prodStage);
+    const dev = pipeline.addStage(devStage);
 
-    // dev.addPost(new ShellStep("Test", {
-    //   envFromCfnOutputs: {
-    //     ENDPOINT_URL: dev.e
-    //   }
-    //   commands: [
-    //     'curl -Ssf $ENDPOINT_URL',
-    //     'curl -Ssf $ENDPOINT_URL/hello',
-    //     'curl -Ssf $ENDPOINT_URL/test'
-    //   ],
-    // }));
+    dev.addPost(new ShellStep("Test", {
+      envFromCfnOutputs: {
+        ENDPOINT_URL: devStage.apiEndpoint,
+      },
+      commands: [
+        'curl --fail $ENDPOINT_URL/test'
+      ],
+    }));
+
+    pipeline.addStage(prodStage);
   }
 }
