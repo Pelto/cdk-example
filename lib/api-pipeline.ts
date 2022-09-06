@@ -22,6 +22,9 @@ export class ApiPipelineStack extends Stack{
         installCommands: [
           `npm install -g aws-cdk`,
         ],
+        buildEnvironment: {
+          privileged: true,
+        }
         commands: [
           `npm ci`,
           `npm run build`,
