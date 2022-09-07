@@ -1,5 +1,6 @@
 import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { Repository } from "aws-cdk-lib/aws-codecommit";
+import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { CodeBuildStep, CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
 
@@ -33,20 +34,28 @@ export class ApiPipelineStack extends Stack{
       }),
     });
 
-    const devStage = new ApiStage(this, "DevStage");
-    const prodStage = new ApiStage(this, "ProdStage");
+    const devApi = new ApiStage(this, "DevStage");
+    const prodApi = new ApiStage(this, "ProdStage");
 
-    const dev = pipeline.addStage(devStage);
+    const dev = pipeline.addStage(devApi);
 
-    dev.addPost(new ShellStep("Test", {
+    const testStep = new CodeBuildStep("TestStep", {
       envFromCfnOutputs: {
-        ENDPOINT_URL: devStage.apiEndpoint,
+        ENDPOINT_URL: devApi.apiEndpoint,
+        TABLE_NAME: devApi.hitTable,
       },
       commands: [
-        'curl --fail $ENDPOINT_URL/test'
+        `aws dynamodb get-item --table-name $TABLE_NAME --key '{"Path": {"S": "/test"}}' > A`,
+        'curl --fail $ENDPOINT_URL/test',
+        `aws dynamodb get-item --table-name $TABLE_NAME --key '{"Path": {"S": "/test"}}' > B`,
+        `cmp A B`
       ],
-    }));
+    });
 
-    pipeline.addStage(prodStage);
+    const devHitTable = Table.fromTableName(this, "DevTable", devApi.hitTable.value);
+    devHitTable.grantReadData(testStep);
+    dev.addPost(testStep);
+
+    pipeline.addStage(prodApi);
   }
 }

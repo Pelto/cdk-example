@@ -11,6 +11,8 @@ export class ApiStack extends cdk.Stack {
 
   public readonly apiEndpoint: CfnOutput;
 
+  public readonly hitTable: CfnOutput;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -47,5 +49,9 @@ export class ApiStack extends cdk.Stack {
     this.apiEndpoint = new CfnOutput(this, "ApiEndpoint", {
       value: api.url,
     });
+
+    this.hitTable = new CfnOutput(this, "HitTableName", {
+      value: table.tableName,
+    })
   }
 }
