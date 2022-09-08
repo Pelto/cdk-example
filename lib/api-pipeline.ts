@@ -42,18 +42,12 @@ export class ApiPipelineStack extends Stack{
     const testStep = new CodeBuildStep("TestStep", {
       envFromCfnOutputs: {
         ENDPOINT_URL: devApi.apiEndpoint,
-        TABLE_NAME: devApi.hitTable,
       },
       commands: [
-        `aws dynamodb get-item --table-name $TABLE_NAME --key '{"Path": {"S": "/test"}}' > A`,
         'curl --fail $ENDPOINT_URL/test',
-        `aws dynamodb get-item --table-name $TABLE_NAME --key '{"Path": {"S": "/test"}}' > B`,
-        `cmp A B`
       ],
     });
 
-    const devHitTable = Table.fromTableName(this, "DevTable", devApi.hitTable.value);
-    devHitTable.grantReadData(testStep);
     dev.addPost(testStep);
 
     pipeline.addStage(prodApi);
