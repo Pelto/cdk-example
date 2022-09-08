@@ -39,7 +39,7 @@ export class ApiPipelineStack extends Stack{
 
     const dev = pipeline.addStage(devApi);
 
-    const testStep = new CodeBuildStep("TestStep", {
+    const testStep = new ShellStep("TestStep", {
       envFromCfnOutputs: {
         ENDPOINT_URL: devApi.apiEndpoint,
       },
