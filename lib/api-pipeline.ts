@@ -26,6 +26,7 @@ export class ApiPipelineStack extends Stack {
         commands: [
           `npm ci`,
           `npm run build`,
+          `npm run test`,
           `npx cdk synth`
         ]
       }),
