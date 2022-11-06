@@ -19,7 +19,6 @@ export class PathTickerApi extends Construct {
     const { handler } = props;
 
     const table = new Table(this, 'CounterTable', {
-      tableName: 'PathCounter',
       partitionKey: { name: 'Path', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,
