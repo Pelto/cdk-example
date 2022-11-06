@@ -1,4 +1,5 @@
 import { Stack, StackProps } from "aws-cdk-lib";
+import { LocalCacheMode, Cache } from "aws-cdk-lib/aws-codebuild";
 import { Repository } from "aws-cdk-lib/aws-codecommit";
 import { CodeBuildStep, CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
@@ -20,6 +21,7 @@ export class ApiPipelineStack extends Stack {
         installCommands: [
           `npm install -g aws-cdk`,
         ],
+        cache: Cache.local(LocalCacheMode.DOCKER_LAYER),
         buildEnvironment: {
           privileged: true,
         },
