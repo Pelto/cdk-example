@@ -654,7 +654,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-Pipeline-DevStage/PipelineDevStageApiStack4BEF2AF3.assets.json\\\\\\" --verbose publish \\\\\\"147ab7304177b1bcd03915af909845957fcacff129ed189b08f34288b72d0ead:current_account-current_region\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-Pipeline-DevStage/PipelineDevStageApiStack4BEF2AF3.assets.json\\\\\\" --verbose publish \\\\\\"752daa174a67e451dd4f817a9b3ef4acae1b895803640605ac42d028025233a9:current_account-current_region\\\\\\"\\"
       ]
     }
   }
