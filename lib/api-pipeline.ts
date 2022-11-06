@@ -1,12 +1,11 @@
-import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
+import { Stack, StackProps } from "aws-cdk-lib";
 import { Repository } from "aws-cdk-lib/aws-codecommit";
-import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { CodeBuildStep, CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
 
 import { ApiStage } from "./api-stage";
 
-export class ApiPipelineStack extends Stack{
+export class ApiPipelineStack extends Stack {
   public constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 

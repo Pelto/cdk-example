@@ -1,36 +1,36 @@
 import { RemovalPolicy, Duration } from "aws-cdk-lib";
+import { LambdaRestApi, RestApi } from "aws-cdk-lib/aws-apigateway";
 import { Table, AttributeType, BillingMode } from "aws-cdk-lib/aws-dynamodb";
 import { IFunction } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
 
 import * as path from 'path';
-
 interface HitCounterProps {
-  target: IFunction;
+  handler: IFunction;
 }
+export class PathTickerApi extends Construct {
 
-export class HitCounter extends Construct {
-
-  public readonly proxyHandler: IFunction;
+  public readonly api: RestApi;
 
   public constructor(scope: Construct, id: string, props: HitCounterProps) {
     super(scope, id);
 
-    const { target } = props;
+    const { handler } = props;
 
-    const table = new Table(this, "CounterTable", {
-      partitionKey: { name: "Path", type: AttributeType.STRING },
+    const table = new Table(this, 'CounterTable', {
+      tableName: 'PathCounter',
+      partitionKey: { name: 'Path', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    this.proxyHandler = new NodejsFunction(this, "HitCounterFunction", {
-      entry: path.join(__dirname, "lambdas/hit-counter.ts"),
+    const proxyHandler = new NodejsFunction(this, 'HitCounterFunction', {
+      entry: path.join(__dirname, 'lambdas/hit-counter.ts'),
       timeout: Duration.seconds(15),
       environment: {
         tableName: table.tableName,
-        downstreamFunction: target.functionName,
+        downstreamFunction: handler.functionName,
       },
       bundling: {
         minify: true,
@@ -38,7 +38,11 @@ export class HitCounter extends Construct {
       },
     });
 
-    table.grantReadWriteData(this.proxyHandler);
-    target.grantInvoke(this.proxyHandler);
+    table.grantReadWriteData(proxyHandler);
+    handler.grantInvoke(proxyHandler);
+
+    this.api = new LambdaRestApi(this, 'ApiGateway', {
+      handler: proxyHandler,
+    });
   }
 }
