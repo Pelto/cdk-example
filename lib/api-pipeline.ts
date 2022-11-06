@@ -14,8 +14,6 @@ export class ApiPipelineStack extends Stack{
       repositoryName: "api",
     });
 
-    repository.applyRemovalPolicy(RemovalPolicy.DESTROY);
-
     const pipeline = new CodePipeline(this, "Pipeline", {
       pipelineName: "ApiPipeline",
       synth: new CodeBuildStep("Synth", {

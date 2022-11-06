@@ -6,6 +6,7 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 
 import * as path from "path";
+import { HitCounter } from './hit-counter';
 
 export class ApiStack extends cdk.Stack {
 
@@ -18,30 +19,12 @@ export class ApiStack extends cdk.Stack {
       entry: path.join(__dirname, "lambdas/hello-world.ts"),
     });
 
-    const table = new Table(this, "CounterTable", {
-      partitionKey: { name: "Path", type: AttributeType.STRING },
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      removalPolicy: RemovalPolicy.DESTROY,
+    const hitCounter = new HitCounter(this, 'counter', {
+      target: helloHandler,
     });
-
-    const hitCounterHandler = new NodejsFunction(this, "HitCounterFunction", {
-      entry: path.join(__dirname, "lambdas/hit-counter.ts"),
-      timeout: Duration.seconds(15),
-      environment: {
-        tableName: table.tableName,
-        downstreamFunction: helloHandler.functionName,
-      },
-      bundling: {
-        minify: true,
-        sourceMap: true,
-      },
-    });
-
-    table.grantReadWriteData(hitCounterHandler);
-    helloHandler.grantInvoke(hitCounterHandler);
 
     const api = new LambdaRestApi(this, "Api", {
-      handler: hitCounterHandler,
+      handler: hitCounter.proxyHandler,
     });
 
     this.apiEndpoint = new CfnOutput(this, "ApiEndpoint", {
