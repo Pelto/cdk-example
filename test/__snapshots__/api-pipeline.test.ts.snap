@@ -82,7 +82,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"1b815dff1657b8163fcf1486b7e42625408163913190ca4466add0bbbd7a149c\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"172ffdf5e7da202a3af4a33f2234c8cdefbbcdb5b0ff8bfd124ed56a96586c24\\"}]",
                   "ProjectName": Object {
                     "Ref": "PipelineBuildSynthCdkBuildProject6BEFA8E6",
                   },
@@ -654,7 +654,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-Pipeline-DevStage/PipelineDevStageApiStack4BEF2AF3.assets.json\\\\\\" --verbose publish \\\\\\"752daa174a67e451dd4f817a9b3ef4acae1b895803640605ac42d028025233a9:current_account-current_region\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-Pipeline-DevStage/PipelineDevStageApiStack4BEF2AF3.assets.json\\\\\\" --verbose publish \\\\\\"2f9a33e801715ddba5199a214a3c95583ac923609e6a45b0bf896e34f85ab512:current_account-current_region\\\\\\"\\"
       ]
     }
   }
@@ -859,6 +859,7 @@ Object {
       \\"commands\\": [
         \\"npm ci\\",
         \\"npm run build\\",
+        \\"npm run test\\",
         \\"npx cdk synth\\"
       ]
     }
