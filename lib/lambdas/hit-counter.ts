@@ -2,7 +2,7 @@ import "source-map-support/register";
 
 import { DynamoDBClient, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { InvokeCommand, LambdaClient} from "@aws-sdk/client-lambda";
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { APIGatewayProxyEvent } from "aws-lambda";
 
 const { tableName, downstreamFunction } = process.env;
 
